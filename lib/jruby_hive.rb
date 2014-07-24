@@ -36,24 +36,45 @@ class Hive
     
   end
   
-  def initialize
+  def initialize(db="default")
+    @db = db
     @hconf = HiveConf.new
     
     @driver = Driver.new(@hconf)
     SessionState.start(CliSessionState.new(@hconf))
+    @driver.run(db)
   end
   
-  def run(cmd)
+  def use(db)
+    @db = db
+    @driver.run(@db)
+  end
+  
+  def run(cmd, max_rows=10000)
     r = @driver.run(cmd)
-    if r.getResponseCode != 0
-      raise HiveError, "hive error: " << r.getErrorMessage
+    begin
+      if r.getResponseCode != 0
+        raise HiveError, "hive error: " << r.getErrorMessage
+      end
+      if block_given?
+        list = ArrayList.new
+        while @driver.getResults(list)
+          list.each do | n |
+            yield n
+          end
+          list.clear
+        end
+      else
+        @driver.setMaxRows(max_rows)
+        list = ArrayList.new
+        if @driver.getResults(list)
+          return list.to_ary
+        end
+        return nil
+      end
+    ensure
+      @driver.destroy
     end
-    
-    list = ArrayList.new
-    if @driver.getResults(list)
-      return list.to_ary
-    end
-    return nil
   end
   
 end
