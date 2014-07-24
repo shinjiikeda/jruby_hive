@@ -3,38 +3,38 @@
 class Hive
 
   def bootstrap
-    include Java
+    require 'java'
     
-    JAR_PATTERN_0_20="hadoop-core-*.jar"
-    
+    @JAR_PATTERN_0_20="hadoop-core-*.jar"
+
     if ENV["HADOOP_HOME"]
-      HADOOP_HOME=ENV["HADOOP_HOME"]
+      hadoop_home=ENV["HADOOP_HOME"]
     else
-      raise "HADOOP_HOME is not set!"
+      raise "hadoop_home is not set!"
     end
     
     if ENV['HIVE_HOME']
-      HIVE_HOME=ENV['HIVE_HOME']
+      hive_home=ENV['HIVE_HOME']
     else
       raise "HIVE_HOME is not set!"
     end
     
     Dir[
-        "#{HADOOP_HOME}/#{JAR_PATTERN_0_20}",
-        "#{HADOOP_HOME}/lib/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/common/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/common/lib/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/hdfs/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/hdfs/lib/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/mapreduce/*.jar",
-        "#{HADOOP_HOME}/share/hadoop/mapreduce/lib/*.jar",
-        "#{HIVE_HOME}/lib/*.jar"
-       ].each do |jar|
+        "#{hadoop_home}/#{@JAR_PATTERN_0_20}",
+        "#{hadoop_home}/lib/*.jar",
+        "#{hadoop_home}/share/hadoop/common/*.jar",
+        "#{hadoop_home}/share/hadoop/common/lib/*.jar",
+        "#{hadoop_home}/share/hadoop/hdfs/*.jar",
+        "#{hadoop_home}/share/hadoop/hdfs/lib/*.jar",
+        "#{hadoop_home}/share/hadoop/mapreduce/*.jar",
+        "#{hadoop_home}/share/hadoop/mapreduce/lib/*.jar",
+        "#{hive_home}/lib/*.jar"
+     ].each do |jar|
       require jar
     end
     
-    $CLASSPATH << "#{HADOOP_HOME}/conf"
-    $CLASSPATH << "#{HIVE_HOME}/conf"
+    $CLASSPATH << "#{hadoop_home}/conf"
+    $CLASSPATH << "#{hive_home}/conf"
     
     java_import 'java.util.ArrayList'
     java_import 'org.apache.hadoop.hive.conf.HiveConf'
@@ -50,8 +50,8 @@ class Hive
     
     @hconf = HiveConf.new
     
-    @driver = Driver.new(hconf)
-    SessionState.start(CliSessionState.new(hconf))
+    @driver = Driver.new(@hconf)
+    SessionState.start(CliSessionState.new(@hconf))
   end
   
   def run(cmd)
