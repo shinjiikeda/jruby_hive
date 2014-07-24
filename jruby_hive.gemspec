@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["gm.ikeda@gmail.com"]
   spec.summary       = %q{jruby hive api}
   spec.description   = %q{}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/shinjiikeda/jruby_hive"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
