@@ -1,7 +1,5 @@
 # JrubyHive
 
-TODO: Write a gem description
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -18,7 +16,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+
+    #!/usr/bin/env jruby
+    # encoding utf-8
+
+    require 'jruby_hive'
+
+    hive = Hive.new
+    p hive.run("show tables")
 
 ## Contributing
 
