@@ -16,6 +16,12 @@ Or install it yourself as:
 
 ## Usage
 
+set env
+
+    $ export HADOOP_HOME=[our hadoop directory path]
+    $ export HIVE_HOME=[your hive directory path]
+
+example code
 
     #!/usr/bin/env jruby
     # encoding utf-8
