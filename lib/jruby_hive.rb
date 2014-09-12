@@ -7,6 +7,7 @@ end
 
 class Hive
   
+  # @private
   def self.bootstrap
     
     if ENV['HIVE_HOME']
@@ -36,6 +37,7 @@ class Hive
     
   end
   
+  # @param [String] db dbname
   def initialize(db="default")
     @db = db
     @hconf = HiveConf.new
@@ -44,12 +46,21 @@ class Hive
     SessionState.start(CliSessionState.new(@hconf))
     @driver.run("use #{@db}")
   end
-  
+
+  # @param [String] db dbname
   def use(db)
     @db = db
     @driver.run("use #{@db}")
   end
   
+  # run query
+  # @example
+  #   hive = Hive.new()
+  #   hive.run("select * from hoge").each do | row |
+  #     p row
+  #   end
+  # @param [String] cmd HQL query
+  # @return [Array] result row array
   def run(cmd, max_rows=10000)
     @driver.setMaxRows(max_rows)
     r = @driver.run(cmd)
